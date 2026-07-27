@@ -33,9 +33,24 @@ export default function AdminUsersPage() {
 
   const handleDelete=async(id:number)=>{
     if(!confirm('Delete this user?'))return;
-    const r=await deleteUserApi(id,token!);
-    if(r.success){toast.success('User deleted');fetchUsers();}
-    else toast.error(r.message||'Cannot delete — active bookings exist');
+    if(!token)return;
+
+    try {
+      const r=await deleteUserApi(id,token);
+      if(r.success){
+        toast.success('User deleted');
+        fetchUsers();
+      } else {
+        const message = (r.message || '').toLowerCase();
+        const friendlyMessage = message.includes('booking') || message.includes('foreign key') || message.includes('constraint') || message.includes('violat')
+          ? 'Cannot delete this user because they still have bookings linked to their account.'
+          : r.message || 'Failed to delete user';
+
+        toast.error(friendlyMessage);
+      }
+    } catch {
+      toast.error('Something went wrong while deleting this user');
+    }
   };
 
   const inp='w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700';

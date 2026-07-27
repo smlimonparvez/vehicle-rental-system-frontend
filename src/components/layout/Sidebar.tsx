@@ -24,7 +24,7 @@ export default function Sidebar() {
 
       {/* Logo */}
       <div className="p-6 border-b border-gray-800">
-        <Link href="/admin/dashboard" className="flex items-center gap-2 font-bold text-lg">
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <Car size={16} />
           </div>

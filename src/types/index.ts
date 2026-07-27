@@ -18,6 +18,7 @@ export interface Vehicle {
   registration_number: string;
   daily_rent_price: number | string;   // PostgreSQL returns string
   availability_status: 'available' | 'booked';
+  image_url?: string | null;
 }
 
 export interface Booking {

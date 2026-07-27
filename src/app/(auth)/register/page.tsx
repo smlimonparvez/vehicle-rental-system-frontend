@@ -29,7 +29,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-md mx-4 my-8">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 text-blue-600 font-bold text-xl mb-2"><Car size={24} /> VehicleRental</div>
+          <Link href="/"><div className="flex items-center justify-center gap-2 text-blue-600 font-bold text-xl mb-2"><Car size={24} /> VehicleRental</div></Link>
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Create account</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Start renting vehicles today</p>
         </div>

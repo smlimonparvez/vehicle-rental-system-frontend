@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const DEMO = [
   { label: 'Admin',    email: 'admin@vehiclerental.com', password: 'admin123',    cls: 'border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-900/20 dark:text-orange-400' },
-  { label: 'Customer', email: 'parvez@example.com',        password: 'parvez123', cls: 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-400' },
+  { label: 'Customer', email: 'sayan@vehiclerental.com',        password: 'Sayan123', cls: 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-400' },
 ];
 const inp = 'w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400';
 
@@ -33,7 +33,7 @@ export default function LoginPage() {
     <div className="w-full max-w-md mx-4">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
         <div className="text-center mb-6">
-          <div className="flex items-center justify-center gap-2 text-blue-600 font-bold text-xl mb-2"><Car size={24} /> VehicleRental</div>
+          <Link href="/"><div className="flex items-center justify-center gap-2 text-blue-600 font-bold text-xl mb-2"><Car size={24} /> VehicleRental</div></Link>
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Welcome back</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Sign in to your account</p>
         </div>

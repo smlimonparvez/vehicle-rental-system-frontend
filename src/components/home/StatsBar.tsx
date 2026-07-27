@@ -3,7 +3,7 @@ import { useScrollAnimation, useCountUp } from '@/hooks/useScrollAnimation';
 
 const STATS = [
   { target: 500,  suffix: '+', label: 'Vehicles Available', icon: '🚗' },
-  { target: 50,   suffix: '+', label: 'Cities Covered',     icon: '🏙' },
+  { target: 50,   suffix: '+', label: 'Cities Covered',     icon: '🌎' },
   { target: 10000,suffix: '+', label: 'Happy Customers',    icon: '😊' },
   { target: 5,    suffix: '+',  label: 'Years of Service',   icon: '🏆' },
 ];

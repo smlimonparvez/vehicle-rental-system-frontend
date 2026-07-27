@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-import { Menu, X, Car, LogOut, ChevronDown, LayoutDashboard, CalendarCheck } from 'lucide-react';
+import { Menu, X, Car, LogOut, ChevronDown, LayoutDashboard, CalendarCheck, HelpCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
@@ -46,10 +46,10 @@ export default function Navbar() {
   return (
     <nav className={`${navBg} border-b sticky top-0 z-50 transition-all duration-300`}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex items-center h-16">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-400">
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-400 shrink-0">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <Car size={16} className="text-white" />
             </div>
@@ -58,19 +58,20 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop */}
-          <div className="hidden md:flex items-center gap-5">
+          {/* Desktop center nav */}
+          <div className="hidden md:flex items-center justify-center flex-1 gap-5">
             <Link href="/vehicles" className={`text-sm transition-colors ${textCls}`}>Vehicles</Link>
             <Link href="/about"    className={`text-sm transition-colors ${textCls}`}>About</Link>
             <Link href="/contact"  className={`text-sm transition-colors ${textCls}`}>Contact</Link>
+          </div>
 
-            {/* ✅ ThemeToggle — always visible */}
+          <div className="hidden md:flex items-center gap-3 ml-auto shrink-0">
             <ThemeToggle />
 
             {user ? (
               user.role === 'admin' ? (
                 <div className="flex items-center gap-3">
-                  <Link href="/admin/dashboard" className={`text-sm transition-colors ${textCls}`}>Admin Panel</Link>
+                  <Link href="/admin/dashboard" className={`text-sm transition-colors ${textCls}`}>Admin Dashboard</Link>
                   <button onClick={handleLogout} className="flex items-center gap-1.5 text-sm bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
                     <LogOut size={15} /> Logout
                   </button>
@@ -104,9 +105,13 @@ export default function Navbar() {
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                           <CalendarCheck size={15} className="text-gray-400" /> My Bookings
                         </Link>
-                        <Link href="/profile" onClick={() => setDropdownOpen(false)}
+                        <Link href="#" onClick={() => setDropdownOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                           <span className="text-gray-400 text-sm">👤</span> My Profile
+                        </Link>
+                        <Link href="#" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                          <HelpCircle size={15} className="text-gray-400" /> Help & Support
                         </Link>
                       </div>
                       <div className="border-t border-gray-100 dark:border-gray-700 py-1">
