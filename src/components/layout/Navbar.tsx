@@ -30,7 +30,13 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
-    router.push('/login');
+    setDropdownOpen(false);
+    setMenuOpen(false);
+    // ✅ FIX: Only go to /login if on a protected customer route.
+    // On public pages (home, vehicles, about, contact) → stay at home.
+    const protectedRoutes = ['/dashboard', '/my-bookings', '/profile'];
+    const isProtected = protectedRoutes.some(r => pathname.startsWith(r));
+    router.push(isProtected ? '/login' : '/');
   };
 
   const initial = user?.name?.charAt(0).toUpperCase() ?? '?';

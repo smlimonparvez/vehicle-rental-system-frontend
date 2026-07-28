@@ -20,7 +20,7 @@ function VehicleImage({ vehicle }: { vehicle: Vehicle }) {
   return (
     <div className={`h-48 flex items-center justify-center relative overflow-hidden ${showFallback ? `bg-gradient-to-br ${vehicleGradient(vehicle.type)}` : 'bg-gray-100 dark:bg-gray-700'}`}>
       {!showFallback ? (
-        <img src={vehicle.image_url ?? ''} alt={vehicle.vehicle_name}
+        <img src={vehicle.image_url} alt={vehicle.vehicle_name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={() => setImgError(true)} />
       ) : (
@@ -37,16 +37,16 @@ function VehicleImage({ vehicle }: { vehicle: Vehicle }) {
 }
 
 export default function VehiclesPage() {
-  const { user, token }           = useAuth();
-  const router                    = useRouter();
-  const [vehicles, setVehicles]   = useState<Vehicle[]>([]);
-  const [filtered, setFiltered]   = useState<Vehicle[]>([]);
-  const [loading, setLoading]     = useState(true);
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [search, setSearch]       = useState('');
-  const [selected, setSelected]   = useState<Vehicle | null>(null);
-  const [dates, setDates]         = useState({ rent_start_date: '', rent_end_date: '' });
-  const [submitting, setSubmitting] = useState(false);
+  const { user, token }               = useAuth();
+  const router                        = useRouter();
+  const [vehicles, setVehicles]       = useState<Vehicle[]>([]);
+  const [filtered, setFiltered]       = useState<Vehicle[]>([]);
+  const [loading, setLoading]         = useState(true);
+  const [typeFilter, setTypeFilter]   = useState('all');
+  const [search, setSearch]           = useState('');
+  const [selected, setSelected]       = useState<Vehicle | null>(null);
+  const [dates, setDates]             = useState({ rent_start_date: '', rent_end_date: '' });
+  const [submitting, setSubmitting]   = useState(false);
 
   const fetchVehicles = async () => {
     const res = await getVehiclesApi();
@@ -59,7 +59,10 @@ export default function VehiclesPage() {
   useEffect(() => {
     let result = vehicles;
     if (typeFilter !== 'all') result = result.filter(v => v.type === typeFilter);
-    if (search.trim()) result = result.filter(v => v.vehicle_name.toLowerCase().includes(search.toLowerCase()) || v.registration_number.toLowerCase().includes(search.toLowerCase()));
+    if (search.trim()) result = result.filter(v =>
+      v.vehicle_name.toLowerCase().includes(search.toLowerCase()) ||
+      v.registration_number.toLowerCase().includes(search.toLowerCase())
+    );
     setFiltered(result);
   }, [typeFilter, search, vehicles]);
 
@@ -92,12 +95,11 @@ export default function VehiclesPage() {
     setSelected(v);
   };
 
-  const today    = new Date().toISOString().split('T')[0];
+  const today     = new Date().toISOString().split('T')[0];
   const available = filtered.filter(v => v.availability_status === 'available').length;
 
   return (
     <div>
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-1">Browse Vehicles</h1>
         <p className="text-gray-500 dark:text-gray-400">
@@ -105,15 +107,13 @@ export default function VehiclesPage() {
         </p>
       </div>
 
-      {/* Search + Filter bar */}
+      {/* Search + Filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            value={search} onChange={e => setSearch(e.target.value)}
+          <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search by name or registration..."
-            className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-          />
+            className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
         </div>
         <div className="flex gap-2 flex-wrap">
           {TYPES.map(t => (
@@ -156,11 +156,8 @@ export default function VehiclesPage() {
                     Details <ArrowRight size={12} className="group-hover/link:translate-x-1 transition-transform" />
                   </Link>
                 </div>
-                <button
-                  onClick={() => onBookClick(v)}
-                  disabled={v.availability_status === 'booked'}
-                  className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => onBookClick(v)} disabled={v.availability_status === 'booked'}
+                  className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   {v.availability_status === 'booked' ? 'Not Available' : 'Book Now'}
                 </button>
               </div>

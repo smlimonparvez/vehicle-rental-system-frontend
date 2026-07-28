@@ -15,28 +15,16 @@ import Modal from '@/components/ui/Modal';
 function VehicleImage({ vehicle }: { vehicle: Vehicle }) {
   const [imgError, setImgError] = useState(false);
   const showFallback = !vehicle.image_url || imgError;
-
   return (
     <div className={`h-80 rounded-2xl overflow-hidden flex items-center justify-center relative ${showFallback ? `bg-gradient-to-br ${vehicleGradient(vehicle.type)}` : 'bg-gray-100 dark:bg-gray-800'}`}>
       {!showFallback ? (
-        <img
-          src={vehicle.image_url ?? ''}
-          alt={vehicle.vehicle_name}
-          className="w-full h-full object-cover"
-          onError={() => setImgError(true)}
-        />
+        <img src={vehicle.image_url} alt={vehicle.vehicle_name} className="w-full h-full object-cover" onError={() => setImgError(true)} />
       ) : (
-        <div className="text-[120px] select-none filter drop-shadow-lg animate-float">
-          {vehicleEmoji(vehicle.type)}
-        </div>
+        <div className="text-[120px] select-none filter drop-shadow-lg animate-float">{vehicleEmoji(vehicle.type)}</div>
       )}
-      <div className="absolute top-4 right-4">
-        <Badge status={vehicle.availability_status} />
-      </div>
+      <div className="absolute top-4 right-4"><Badge status={vehicle.availability_status} /></div>
       <div className="absolute bottom-4 left-4">
-        <span className="bg-black/40 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full capitalize">
-          {vehicle.type}
-        </span>
+        <span className="bg-black/40 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full capitalize">{vehicle.type}</span>
       </div>
     </div>
   );
@@ -46,12 +34,11 @@ export default function VehicleDetailPage() {
   const { id }           = useParams<{ id: string }>();
   const { user, token }  = useAuth();
   const router           = useRouter();
-
-  const [vehicle, setVehicle]       = useState<Vehicle | null>(null);
-  const [loading, setLoading]       = useState(true);
+  const [vehicle, setVehicle]         = useState<Vehicle | null>(null);
+  const [loading, setLoading]         = useState(true);
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [dates, setDates]           = useState({ rent_start_date: '', rent_end_date: '' });
-  const [submitting, setSubmitting] = useState(false);
+  const [dates, setDates]             = useState({ rent_start_date: '', rent_end_date: '' });
+  const [submitting, setSubmitting]   = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -72,17 +59,9 @@ export default function VehicleDetailPage() {
     if (calcDays() <= 0) { toast.error('End date must be after start date'); return; }
     setSubmitting(true);
     try {
-      const res = await createBookingApi(
-        { customer_id: user.id, vehicle_id: vehicle.id, ...dates },
-        token
-      );
-      if (res.success) {
-        toast.success('Booking created successfully!');
-        setBookingOpen(false);
-        router.push('/my-bookings');
-      } else {
-        toast.error(res.message || 'Booking failed');
-      }
+      const res = await createBookingApi({ customer_id: user.id, vehicle_id: vehicle.id, ...dates }, token);
+      if (res.success) { toast.success('Booking created!'); setBookingOpen(false); router.push('/my-bookings'); }
+      else toast.error(res.message || 'Booking failed');
     } catch { toast.error('Something went wrong'); }
     finally { setSubmitting(false); }
   };
@@ -93,10 +72,9 @@ export default function VehicleDetailPage() {
     setBookingOpen(true);
   };
 
-  const today = new Date().toISOString().split('T')[0];
+  const today      = new Date().toISOString().split('T')[0];
   const totalPrice = vehicle ? parseFloat(String(vehicle.daily_rent_price)) * calcDays() : 0;
 
-  // ── Loading skeleton ──────────────────────────────────────
   if (loading) return (
     <div className="max-w-5xl mx-auto px-6 py-10">
       <Skeleton className="h-5 w-32 mb-8" />
@@ -104,26 +82,19 @@ export default function VehicleDetailPage() {
         <Skeleton className="h-80 rounded-2xl" />
         <div className="flex flex-col gap-4">
           <Skeleton className="h-9 w-3/4" /><Skeleton className="h-4 w-1/2" />
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
-          </div>
-          <Skeleton className="h-10 w-1/3 mt-4" />
-          <Skeleton className="h-12 w-full mt-2" />
+          <div className="grid grid-cols-2 gap-3 mt-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}</div>
+          <Skeleton className="h-10 w-1/3 mt-4" /><Skeleton className="h-12 w-full mt-2" />
         </div>
       </div>
     </div>
   );
 
-  // ── Not found ─────────────────────────────────────────────
   if (!vehicle) return (
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="text-center">
         <p className="text-7xl mb-4">🔍</p>
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Vehicle Not Found</h2>
-        <p className="text-gray-400 mb-6">This vehicle may have been removed.</p>
-        <Link href="/vehicles" className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-          Browse All Vehicles
-        </Link>
+        <Link href="/vehicles" className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-700 transition-colors">Browse All Vehicles</Link>
       </div>
     </div>
   );
@@ -137,20 +108,13 @@ export default function VehicleDetailPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
-
-      {/* Back */}
       <Link href="/vehicles" className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 mb-8 group transition-colors">
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        Back to Vehicles
+        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Vehicles
       </Link>
 
       <div className="grid md:grid-cols-2 gap-10 items-start">
-
-        {/* Left — Image */}
         <div>
           <VehicleImage vehicle={vehicle} />
-
-          {/* Additional info card */}
           <div className="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-2xl p-4">
             <div className="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-semibold text-sm mb-2">
               <CheckCircle size={16} /> What's included
@@ -164,17 +128,11 @@ export default function VehicleDetailPage() {
           </div>
         </div>
 
-        {/* Right — Details */}
         <div className="flex flex-col">
-          <span className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-2">
-            {vehicle.type}
-          </span>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            {vehicle.vehicle_name}
-          </h1>
+          <span className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-2">{vehicle.type}</span>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{vehicle.vehicle_name}</h1>
           <p className="text-gray-400 text-sm mb-6">{vehicle.registration_number}</p>
 
-          {/* Specs grid */}
           <div className="grid grid-cols-2 gap-3 mb-6">
             {specs.map(({ icon: Icon, label, value }) => (
               <div key={label} className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
@@ -187,70 +145,47 @@ export default function VehicleDetailPage() {
             ))}
           </div>
 
-          {/* Price */}
           <div className="flex items-end gap-2 mb-8">
             <span className="text-5xl font-bold text-blue-600">{toCurrency(vehicle.daily_rent_price)}</span>
             <span className="text-gray-400 mb-2 text-lg">/day</span>
           </div>
 
-          {/* CTA */}
-          <button
-            onClick={onBookClick}
-            disabled={vehicle.availability_status === 'booked'}
-            className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg"
-          >
+          <button onClick={onBookClick} disabled={vehicle.availability_status === 'booked'}
+            className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
             {vehicle.availability_status === 'booked' ? '✗ Not Available' : '📅 Book This Vehicle'}
           </button>
 
           {vehicle.availability_status === 'available' && (
-            <p className="text-center text-xs text-gray-400 mt-3">
-              ✓ Free cancellation · ✓ Instant confirmation
-            </p>
+            <p className="text-center text-xs text-gray-400 mt-3">✓ Free cancellation · ✓ Instant confirmation</p>
           )}
         </div>
       </div>
 
-      {/* Booking Modal */}
       <Modal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} title={`Book — ${vehicle.vehicle_name}`}>
         <form onSubmit={handleBook} className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Start Date</label>
-            <input
-              type="date" min={today} required
-              value={dates.rent_start_date}
+            <input type="date" min={today} required value={dates.rent_start_date}
               onChange={e => setDates({ ...dates, rent_start_date: e.target.value })}
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">End Date</label>
-            <input
-              type="date" min={dates.rent_start_date || today} required
-              value={dates.rent_end_date}
+            <input type="date" min={dates.rent_start_date || today} required value={dates.rent_end_date}
               onChange={e => setDates({ ...dates, rent_end_date: e.target.value })}
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
-
           {calcDays() > 0 && (
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 space-y-1.5">
-              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>Daily rate</span><span>{toCurrency(vehicle.daily_rent_price)}</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>Duration</span><span>{calcDays()} day(s)</span>
-              </div>
+              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Daily rate</span><span>{toCurrency(vehicle.daily_rent_price)}</span></div>
+              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Duration</span><span>{calcDays()} day(s)</span></div>
               <div className="border-t border-blue-200 dark:border-blue-700 pt-1.5 flex justify-between font-bold text-gray-900 dark:text-white text-lg">
-                <span>Total</span>
-                <span className="text-blue-600">{toCurrency(totalPrice)}</span>
+                <span>Total</span><span className="text-blue-600">{toCurrency(totalPrice)}</span>
               </div>
             </div>
           )}
-
-          <button
-            type="submit" disabled={submitting}
-            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 mt-1"
-          >
+          <button type="submit" disabled={submitting}
+            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60">
             {submitting ? 'Booking...' : 'Confirm Booking'}
           </button>
         </form>
