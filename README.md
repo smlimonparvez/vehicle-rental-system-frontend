@@ -1,6 +1,6 @@
 # 🚗 Vehicle Rental System
 
-A full-stack vehicle rental management application with a Node.js/TypeScript backend API and a Next.js 14 frontend. Customers can browse and book vehicles; admins manage the fleet, users, and booki[...]
+A full-stack vehicle rental management application with a Node.js/TypeScript backend API and a Next.js 16 frontend. Customers can browse and book vehicles; admins manage the fleet, users, and booki[...]
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20Site-brightgreen?style=for-the-badge&logo=vercel)](https://vehicle-rental-frontend-kappa.vercel.app)  
 [![API Base URL](https://img.shields.io/badge/API-Base%20URL-blue?style=for-the-badge)](https://vehicle-rental-system-back-end.vercel.app)
