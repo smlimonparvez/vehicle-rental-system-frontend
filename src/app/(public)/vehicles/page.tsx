@@ -17,10 +17,11 @@ const TYPES = ['all', 'car', 'bike', 'van', 'SUV'];
 function VehicleImage({ vehicle }: { vehicle: Vehicle }) {
   const [imgError, setImgError] = useState(false);
   const showFallback = !vehicle.image_url || imgError;
+  const imageSrc = vehicle.image_url ?? '';
   return (
     <div className={`h-48 flex items-center justify-center relative overflow-hidden ${showFallback ? `bg-gradient-to-br ${vehicleGradient(vehicle.type)}` : 'bg-gray-100 dark:bg-gray-700'}`}>
       {!showFallback ? (
-        <img src={vehicle.image_url} alt={vehicle.vehicle_name}
+        <img src={imageSrc} alt={vehicle.vehicle_name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={() => setImgError(true)} />
       ) : (

@@ -32,7 +32,7 @@ export default function Navbar() {
     logout();
     setDropdownOpen(false);
     setMenuOpen(false);
-    // ✅ FIX: Only go to /login if on a protected customer route.
+    // Only go to /login if on a protected customer route.
     // On public pages (home, vehicles, about, contact) → stay at home.
     const protectedRoutes = ['/dashboard', '/my-bookings', '/profile'];
     const isProtected = protectedRoutes.some(r => pathname.startsWith(r));
